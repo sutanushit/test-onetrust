@@ -11,11 +11,12 @@
     }
   </style>
   <script>
+    let token = localStorage.getItem('token');
   	var OneTrust = {
   		dataSubjectParams: {
   			id: "testseot4@yopmail.com",
   			isAnonymous: false,
-            token: localStorage.getItem('token')
+            token: token
   		}
   	};
   </script>
