@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login</title>
+	<style>
+		:root {
+			--bg: #f4f6fb;
+			--card: #ffffff;
+			--text: #1f2937;
+			--muted: #6b7280;
+			--accent: #3DCD58;
+			--accent-hover: #3DCD58;
+			--border: #d1d5db;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			display: grid;
+			place-items: center;
+			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(160deg, #e6efff, var(--bg));
+			color: var(--text);
+		}
+
+		.login-card {
+			width: min(92vw, 380px);
+			background: var(--card);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			padding: 28px;
+			box-shadow: 0 12px 30px rgba(15, 118, 110, 0.12);
+		}
+
+		h1 {
+			margin: 0 0 8px;
+			font-size: 1.6rem;
+		}
+
+		p {
+			margin: 0 0 20px;
+			color: var(--muted);
+		}
+
+		.field {
+			margin-bottom: 14px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 6px;
+			font-size: 0.92rem;
+			font-weight: 600;
+		}
+
+		input {
+			width: 100%;
+			padding: 10px 12px;
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			font-size: 1rem;
+		}
+
+		input:focus {
+			outline: 2px solid #99f6e4;
+			border-color: var(--accent);
+		}
+
+		button {
+			width: 100%;
+			border: 0;
+			border-radius: 8px;
+			background: var(--accent);
+			color: #ffffff;
+			font-size: 1rem;
+			font-weight: 600;
+			padding: 11px;
+			cursor: pointer;
+			transition: background-color 0.2s ease;
+		}
+
+		button:hover {
+			background: var(--accent-hover);
+		}
+	</style>
+</head>
+<body>
+	<main class="login-card">
+		<h1>Sign in</h1>
+		<p>Use your email and password to continue.</p>
+
+		<form id="loginForm" action="test.html" method="get">
+			<div class="field">
+				<label for="email">Email</label>
+				<input id="email" name="email" type="email" placeholder="name@example.com" required>
+			</div>
+
+			<div class="field">
+				<label for="password">Password</label>
+				<input id="password" name="password" type="password" placeholder="Enter your password" required>
+			</div>
+
+			<button type="submit">Login</button>
+		</form>
+	</main>
+
+	<script>
+		const loginForm = document.getElementById("loginForm");
+
+		loginForm.addEventListener("submit", function (event) {
+			event.preventDefault();
+
+			const email = document.getElementById("email").value;
+			const password = document.getElementById("password").value;
+
+			if (email && password) {
+        localStorage.setItem("userToken", password);
+        localStorage.setItem("userEmail", email);
+				window.location.href = "test.html";
+			}
+		});
+	</script>
+</body>
+</html>
