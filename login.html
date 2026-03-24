@@ -120,8 +120,8 @@
 			const password = document.getElementById("password").value;
 
 			if (email && password) {
-        localStorage.setItem("userToken", password);
-        localStorage.setItem("userEmail", email);
+                localStorage.setItem("userToken", password);
+				localStorage.setItem("userEmail", email);
 				window.location.href = "test.html";
 			}
 		});
