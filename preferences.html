@@ -51,7 +51,7 @@
     /* Page language */
     const pageParams = new URLSearchParams(window.location.search);
     const pagelangCode = pageParams.get('language');
-    if(pageLanguage){
+    if(pagelangCode){
         document.documentElement.lang = pagelangCode;
     }
       
