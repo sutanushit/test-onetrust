@@ -47,6 +47,14 @@
     		}
     	};
     }
+      
+    /* Page language */
+    const pageParams = new URLSearchParams(window.location.search);
+    const pagelangCode = pageParams.get('language');
+    if(pageLanguage){
+        document.documentElement.lang = pagelangCode;
+    }
+      
   </script>
 </head>
 <body>
