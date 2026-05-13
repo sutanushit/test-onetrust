@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preference Center</title>
-  <style>
-    :root {
-        font-size: 10px;
-        font-family: Arial Rounded MT for SE, Arial Rounded MT Fallback, Arial Fallback, Arial, system-ui, -apple-system, sans-serif;
-    }
-             .session-bar {
+    <style>
+        :root {
+            font-size: 10px;
+            font-family: Arial Rounded MT for SE, Arial Rounded MT Fallback, Arial Fallback, Arial, system-ui, -apple-system, sans-serif;
+        }
+
+        .session-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -73,21 +75,8 @@
             box-sizing: border-box;
         }
 
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .mobile-placeholder {
-            border: 1px dashed #bdbdbd;
-            border-radius: 10px;
-            padding: 20px;
-            font-size: 1.5rem;
-            color: #555;
-            background: #fff;
+        .trust-center-host {
+            min-height: 300px;
         }
 
         @media (max-width: 768px) {
@@ -107,29 +96,30 @@
                 margin-bottom: 0;
             }
         }
-  </style>
-  <script>
-    let userToken = localStorage.getItem('userToken');
-    let userEmail = localStorage.getItem('userEmail');
-    if (userEmail && userToken) {
-    	var OneTrust = {
-    		dataSubjectParams: {
-    			id: userEmail,
-    			isAnonymous: false,
-                token: userToken
-    		}
-    	};
-    }
-      
-    /* Page language */
-    const pageParams = new URLSearchParams(window.location.search);
-    const pagelangCode = pageParams.get('language');
-    if(pagelangCode){
-        document.documentElement.lang = pagelangCode;
-    }
-      
-  </script>
+    </style>
+    <script>
+        let userToken = localStorage.getItem('userToken');
+        let userEmail = localStorage.getItem('userEmail');
+        if (userEmail && userToken) {
+            var OneTrust = {
+                dataSubjectParams: {
+                    id: userEmail,
+                    isAnonymous: false,
+                    token: userToken
+                }
+            };
+        }
+
+        /* Page language */
+        const pageParams = new URLSearchParams(window.location.search);
+        const pagelangCode = pageParams.get('language');
+        if (pagelangCode) {
+            document.documentElement.lang = pagelangCode;
+        }
+
+    </script>
 </head>
+
 <body>
 
     <div class="session-bar">
@@ -144,37 +134,16 @@
         </aside>
 
         <section class="content-panel">
-            <div id="emailContent" class="tab-content active">
-                <trust-center
-                tenantId="221db9bd-276f-4f86-8e1c-53c7d470edee"
-                portalId="80e08adf-239e-4dae-bc03-de6c1c97bc05"
-                blobUrl="https://testcomplianceportal.se.com"
-                workerUrl="https://portal-api.onetrust.com"
-                ></trust-center>
-            </div>
-
-            <div id="mobileContent" class="tab-content">
-                <trust-center
-                tenantId="221db9bd-276f-4f86-8e1c-53c7d470edee"
-                portalId="36707a95-2d18-4841-98c5-0c59570bf048"
-                blobUrl="https://testcomplianceportal.se.com"
-                workerUrl="https://portal-api.onetrust.com"
-                ></trust-center>
-            </div>
+            <div id="trustCenterHost" class="trust-center-host"></div>
         </section>
     </div>
-
-    <script
-    id="portalSdkScript"
-    src="https://testcomplianceportal.se.com/portal-trust-center/trust-center/scripts/portal-sdk.js"
-    type="text/javascript"
-    ></script>
 
     <script>
         const emailText = document.getElementById('userEmailText');
         const sessionEmail = document.getElementById('sessionEmail');
         const logoutBtn = document.getElementById('logoutBtn');
         const storedEmail = localStorage.getItem('userEmail');
+        const trustCenterHost = document.getElementById('trustCenterHost');
 
         if (storedEmail) {
             emailText.textContent = 'Signed in as: ' + storedEmail;
@@ -194,36 +163,55 @@
         });
 
         const tabButtons = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
-        function refreshTrustCenter(targetId) {
-            const targetContent = document.getElementById(targetId);
-            if (!targetContent) {
+        const trustCenterConfig = {
+            emailContent: {
+                tenantId: '221db9bd-276f-4f86-8e1c-53c7d470edee',
+                portalId: '80e08adf-239e-4dae-bc03-de6c1c97bc05'
+            },
+            mobileContent: {
+                tenantId: '221db9bd-276f-4f86-8e1c-53c7d470edee',
+                portalId: '36707a95-2d18-4841-98c5-0c59570bf048'
+            }
+        };
+
+        function renderTrustCenter(targetId) {
+            const selectedConfig = trustCenterConfig[targetId];
+            if (!selectedConfig || !trustCenterHost) {
                 return;
             }
 
-            const existingTrustCenter = targetContent.querySelector('trust-center');
-            if (!existingTrustCenter) {
-                return;
-            }
+            trustCenterHost.querySelectorAll('trust-center').forEach(function (element) {
+                element.remove();
+            });
 
-            const clonedTrustCenter = existingTrustCenter.cloneNode(true);
-            existingTrustCenter.replaceWith(clonedTrustCenter);
+            const trustCenter = document.createElement('trust-center');
+            trustCenter.setAttribute('tenantId', selectedConfig.tenantId);
+            trustCenter.setAttribute('portalId', selectedConfig.portalId);
+            trustCenter.setAttribute('blobUrl', 'https://testcomplianceportal.se.com');
+            trustCenter.setAttribute('workerUrl', 'https://portal-api.onetrust.com');
+            trustCenterHost.appendChild(trustCenter);
+
+
+            (function () {
+                var script = document.createElement("script");
+                script.src = "https://testcomplianceportal.se.com/portal-trust-center/trust-center/scripts/trust-center-sdk.js";
+                script.type = "text/javascript";
+                script.charset = "utf-8";
+
+                document.head.appendChild(script);
+            })();
         }
 
         function activateTab(targetId) {
-            const previousActive = document.querySelector('.tab-content.active');
-            const wasTargetActive = previousActive && previousActive.id === targetId;
+            const activeButton = document.querySelector('.tab-btn.active');
+            const wasTargetActive = activeButton && activeButton.dataset.target === targetId;
 
             tabButtons.forEach(function (button) {
                 button.classList.toggle('active', button.dataset.target === targetId);
             });
 
-            tabContents.forEach(function (content) {
-                content.classList.toggle('active', content.id === targetId);
-            });
-
             if ((targetId === 'mobileContent' || targetId === 'emailContent') && !wasTargetActive) {
-                refreshTrustCenter(targetId);
+                renderTrustCenter(targetId);
             }
         }
 
@@ -232,7 +220,10 @@
                 activateTab(button.dataset.target);
             });
         });
+
+        renderTrustCenter('emailContent');
     </script>
 
 </body>
+
 </html>
