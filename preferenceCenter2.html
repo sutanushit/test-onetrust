@@ -175,6 +175,7 @@
         };
 
         function renderTrustCenter(targetId) {
+            sessionStorage.removeItem('token');
             const selectedConfig = trustCenterConfig[targetId];
             if (!selectedConfig || !trustCenterHost) {
                 return;
@@ -193,7 +194,13 @@
 
 
             (function () {
+                var existingScript = document.getElementById("trustCenterSdkScript");
+                if (existingScript) {
+                    existingScript.remove();
+                }
+
                 var script = document.createElement("script");
+                script.id = "trustCenterSdkScript";
                 script.src = "https://testcomplianceportal.se.com/portal-trust-center/trust-center/scripts/trust-center-sdk.js";
                 script.type = "text/javascript";
                 script.charset = "utf-8";
