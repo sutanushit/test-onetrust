@@ -154,7 +154,6 @@
             </div>
 
             <div id="mobileContent" class="tab-content">
-                <div id="emailContent" class="tab-content active">
                 <trust-center
                 tenantId="221db9bd-276f-4f86-8e1c-53c7d470edee"
                 portalId="36707a95-2d18-4841-98c5-0c59570bf048"
@@ -162,11 +161,11 @@
                 workerUrl="https://portal-api.onetrust.com"
                 ></trust-center>
             </div>
-            </div>
         </section>
     </div>
 
     <script
+    id="portalSdkScript"
     src="https://testcomplianceportal.se.com/portal-trust-center/trust-center/scripts/portal-sdk.js"
     type="text/javascript"
     ></script>
@@ -196,8 +195,25 @@
 
         const tabButtons = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
+        const portalSdkSrc = 'https://testcomplianceportal.se.com/portal-trust-center/trust-center/scripts/portal-sdk.js';
+
+        function reloadPortalSdkScript() {
+            const existingScript = document.getElementById('portalSdkScript');
+            if (existingScript) {
+                existingScript.remove();
+            }
+
+            const script = document.createElement('script');
+            script.id = 'portalSdkScript';
+            script.src = portalSdkSrc;
+            script.type = 'text/javascript';
+            document.body.appendChild(script);
+        }
 
         function activateTab(targetId) {
+            const previousActive = document.querySelector('.tab-content.active');
+            const wasTargetActive = previousActive && previousActive.id === targetId;
+
             tabButtons.forEach(function (button) {
                 button.classList.toggle('active', button.dataset.target === targetId);
             });
@@ -205,6 +221,10 @@
             tabContents.forEach(function (content) {
                 content.classList.toggle('active', content.id === targetId);
             });
+
+            if ((targetId === 'mobileContent' || targetId === 'emailContent') && !wasTargetActive) {
+                reloadPortalSdkScript();
+            }
         }
 
         tabButtons.forEach(function (button) {
