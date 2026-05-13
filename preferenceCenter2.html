@@ -195,19 +195,19 @@
 
         const tabButtons = document.querySelectorAll('.tab-btn');
         const tabContents = document.querySelectorAll('.tab-content');
-        const portalSdkSrc = 'https://testcomplianceportal.se.com/portal-trust-center/trust-center/scripts/portal-sdk.js';
-
-        function reloadPortalSdkScript() {
-            const existingScript = document.getElementById('portalSdkScript');
-            if (existingScript) {
-                existingScript.remove();
+        function refreshTrustCenter(targetId) {
+            const targetContent = document.getElementById(targetId);
+            if (!targetContent) {
+                return;
             }
 
-            const script = document.createElement('script');
-            script.id = 'portalSdkScript';
-            script.src = portalSdkSrc;
-            script.type = 'text/javascript';
-            document.body.appendChild(script);
+            const existingTrustCenter = targetContent.querySelector('trust-center');
+            if (!existingTrustCenter) {
+                return;
+            }
+
+            const clonedTrustCenter = existingTrustCenter.cloneNode(true);
+            existingTrustCenter.replaceWith(clonedTrustCenter);
         }
 
         function activateTab(targetId) {
@@ -223,7 +223,7 @@
             });
 
             if ((targetId === 'mobileContent' || targetId === 'emailContent') && !wasTargetActive) {
-                reloadPortalSdkScript();
+                refreshTrustCenter(targetId);
             }
         }
 
