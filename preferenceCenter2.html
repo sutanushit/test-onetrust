@@ -178,10 +178,10 @@
             const otTrustCenterToken = sessionStorage.getItem('token');
             if (otTrustCenterToken) {
                 if (targetId === 'mobileContent') {
-                    trustCenterConfig?.emailContent?.token = otTrustCenterToken;
+                    trustCenterConfig.emailContent.token = otTrustCenterToken;
                 }
                 if (targetId === 'emailContent') {
-                    trustCenterConfig?.mobileContent?.token = otTrustCenterToken;
+                    trustCenterConfig.mobileContent.token = otTrustCenterToken;
                 }
             }
             sessionStorage.removeItem('token');
