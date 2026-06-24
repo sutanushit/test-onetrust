@@ -175,10 +175,25 @@
         };
 
         function renderTrustCenter(targetId) {
+            const otTrustCenterToken = sessionStorage.getItem('token');
+            if (otTrustCenterToken) {
+                if (targetId === 'mobileContent') {
+                    trustCenterConfig?.emailContent?.token = otTrustCenterToken;
+                }
+                if (targetId === 'emailContent') {
+                    trustCenterConfig?.mobileContent?.token = otTrustCenterToken;
+                }
+            }
             sessionStorage.removeItem('token');
             const selectedConfig = trustCenterConfig[targetId];
             if (!selectedConfig || !trustCenterHost) {
                 return;
+            }
+
+            const otTrustCenterExistingToken = trustCenterConfig[targetId]?.token;
+
+            if (otTrustCenterExistingToken) {
+                sessionStorage.setItem('token', otTrustCenterExistingToken);
             }
 
             trustCenterHost.querySelectorAll('trust-center').forEach(function (element) {
