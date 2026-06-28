@@ -122,7 +122,8 @@
 
         const seTrustCenterSession = {
             emailToken: null,
-            mobileToken: null
+            mobileToken: null,
+            activeChannel: null
         };
 
         var OneTrust = {};
@@ -150,30 +151,38 @@
         const setTrustCenterSession = (channel) => {
             const otTrustCenterToken = sessionStorage.getItem('token');
             logoutSETrustCenter();
-            if (channel === 'email') {
-                if (otTrustCenterToken) {
+
+             // Save the current token to whichever channel was actually active
+            if (otTrustCenterToken && seTrustCenterSession.activeChannel) {
+                if (seTrustCenterSession.activeChannel === 'email') {
+                    seTrustCenterSession.emailToken = otTrustCenterToken;
+                } else if (seTrustCenterSession.activeChannel === 'mobile') {
                     seTrustCenterSession.mobileToken = otTrustCenterToken;
                 }
-                if (seTrustCenterSession.emailToken) {
-                    sessionStorage.setItem('token', seTrustCenterSession.emailToken);
-                } else if (seDataSubject.userEmailToken) {
+            }
+            
+            // Update the active channel
+            seTrustCenterSession.activeChannel = channel;
+
+            // Restore the target channel's token
+            if (channel === 'email') {
+                if (seDataSubject.userEmailToken) {
                     setDataSubjectParams('email');
+                } else if (seTrustCenterSession.emailToken) {
+                    sessionStorage.setItem('token', seTrustCenterSession.emailToken);
                 }
             } else if (channel === 'mobile') {
-                if (otTrustCenterToken) {
-                    seTrustCenterSession.emailToken = otTrustCenterToken;
-                }
-                if (seTrustCenterSession.mobileToken) {
-                    sessionStorage.setItem('token', seTrustCenterSession.mobileToken);
-                } else if (seDataSubject.userMobileToken) {
+                if (seDataSubject.userMobileToken) {
                     setDataSubjectParams('mobile');
+                } else if (seTrustCenterSession.mobileToken) {
+                    sessionStorage.setItem('token', seTrustCenterSession.mobileToken);
                 }
             }
         };
 
         const loadTrustCenterWebComponent = (channel = 'email') => {
             const trustCenterHost = document.getElementById('trustCenterHost');
-
+            
             trustCenterHost.querySelectorAll('trust-center').forEach(function (element) {
                 element.remove();
             });
