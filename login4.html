@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login</title>
+	<style>
+		:root {
+			--bg: #f4f6fb;
+			--card: #ffffff;
+			--text: #1f2937;
+			--muted: #6b7280;
+			--accent: #3DCD58;
+			--accent-hover: #34b84d;
+			--border: #d1d5db;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			display: grid;
+			place-items: center;
+			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(160deg, #e6efff, var(--bg));
+			color: var(--text);
+		}
+
+		.login-card {
+			width: min(92vw, 440px);
+			background: var(--card);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			padding: 28px;
+			box-shadow: 0 12px 30px rgba(15, 118, 110, 0.12);
+		}
+
+		h1 {
+			margin: 0 0 4px;
+			font-size: 1.6rem;
+		}
+
+		.subtitle {
+			margin: 0 0 20px;
+			color: var(--muted);
+			font-size: 0.92rem;
+		}
+
+		.section-label {
+			font-size: 0.85rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			color: var(--muted);
+			margin: 18px 0 8px;
+			padding-bottom: 4px;
+			border-bottom: 1px solid var(--border);
+		}
+
+		.section-label:first-of-type {
+			margin-top: 0;
+		}
+
+		.field {
+			margin-bottom: 14px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 6px;
+			font-size: 0.92rem;
+			font-weight: 600;
+		}
+
+		input {
+			width: 100%;
+			padding: 10px 12px;
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			font-size: 1rem;
+		}
+
+		input:focus {
+			outline: 2px solid #99f6e4;
+			border-color: var(--accent);
+		}
+
+		button {
+			width: 100%;
+			border: 0;
+			border-radius: 8px;
+			background: var(--accent);
+			color: #ffffff;
+			font-size: 1rem;
+			font-weight: 600;
+			padding: 11px;
+			cursor: pointer;
+			margin-top: 8px;
+			transition: background-color 0.2s ease;
+		}
+
+		button:hover {
+			background: var(--accent-hover);
+		}
+
+		.hint {
+			margin-top: 14px;
+			text-align: center;
+			font-size: 0.82rem;
+			color: var(--muted);
+		}
+	</style>
+</head>
+<body>
+	<main class="login-card">
+		<h1>Sign in</h1>
+		<p class="subtitle">Enter your identifiers and tokens to continue.</p>
+
+		<form id="loginForm">
+			<div class="section-label">Email Channel</div>
+			<div class="field">
+				<label for="email">Email</label>
+				<input id="email" name="email" type="email" placeholder="name@example.com">
+			</div>
+			<div class="field">
+				<label for="emailToken">Email Token</label>
+				<input id="emailToken" name="emailToken" type="text" placeholder="Enter email token">
+			</div>
+
+			<div class="section-label">Mobile Channel</div>
+			<div class="field">
+				<label for="mobile">Mobile</label>
+				<input id="mobile" name="mobile" type="text" placeholder="Mobile identifier">
+			</div>
+			<div class="field">
+				<label for="mobileToken">Mobile Token</label>
+				<input id="mobileToken" name="mobileToken" type="text" placeholder="Enter mobile token">
+			</div>
+
+			<button type="submit">Login</button>
+		</form>
+
+		<p class="hint">At least one channel (email or mobile) is required.</p>
+	</main>
+
+	<script>
+		var loginForm = document.getElementById("loginForm");
+
+		loginForm.addEventListener("submit", function (event) {
+			event.preventDefault();
+
+			var email = document.getElementById("email").value.trim();
+			var emailToken = document.getElementById("emailToken").value.trim();
+			var mobile = document.getElementById("mobile").value.trim();
+			var mobileToken = document.getElementById("mobileToken").value.trim();
+
+			if (!email && !mobile) {
+				alert("Please enter at least an email or a mobile identifier.");
+				return;
+			}
+
+			if (email) {
+				localStorage.setItem("userEmail", email);
+			} else {
+				localStorage.removeItem("userEmail");
+			}
+
+			if (emailToken) {
+				localStorage.setItem("userEmailToken", emailToken);
+			} else {
+				localStorage.removeItem("userEmailToken");
+			}
+
+			if (mobile) {
+				localStorage.setItem("userMobile", mobile);
+			} else {
+				localStorage.removeItem("userMobile");
+			}
+
+			if (mobileToken) {
+				localStorage.setItem("userMobileToken", mobileToken);
+			} else {
+				localStorage.removeItem("userMobileToken");
+			}
+
+			window.location.href = "preferenceCenter4.html";
+		});
+	</script>
+</body>
+</html>
