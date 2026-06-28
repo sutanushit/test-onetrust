@@ -250,6 +250,17 @@
             logoutBtn.textContent = 'Login';
         }
 
+        // Test: Intercept sessionStorage.setItem to detect when the SDK sets the identifier token and update the session bar accordingly
+        const originalSetItem = sessionStorage.setItem.bind(sessionStorage);
+        sessionStorage.setItem = function (key, value) {
+            originalSetItem(key, value);
+            if (key === 'identifier' && value) {
+                emailText.textContent = 'Signed in as: ' + value;
+                sessionEmail.style.display = 'flex';
+                logoutBtn.textContent = 'Logout';
+            }
+        };
+
         logoutBtn.addEventListener('click', function () {
             if (storedEmail) {
                 localStorage.removeItem('userEmail');
