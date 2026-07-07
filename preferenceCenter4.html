@@ -269,13 +269,12 @@
         };
 
         logoutBtn.addEventListener('click', function () {
-            if (storedEmail) {
-                localStorage.removeItem('userEmail');
-                localStorage.removeItem('userEmailToken');
-                localStorage.removeItem('userMobile');
-                localStorage.removeItem('userMobileToken');
-                sessionStorage.removeItem('token');
-            }
+            
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userEmailToken');
+            localStorage.removeItem('userMobile');
+            localStorage.removeItem('userMobileToken');
+            sessionStorage.removeItem('token');
             window.location.href = 'login4.html';
         });
 
