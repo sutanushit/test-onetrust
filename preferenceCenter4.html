@@ -146,7 +146,13 @@
 
         const logoutSETrustCenter = () => {
             sessionStorage.removeItem('token');
-            OneTrust = {};
+            sessionStorage.removeItem('portalId');
+            sessionStorage.removeItem('identifier');
+            sessionStorage.removeItem('dsUserId');
+
+            delete OneTrust?.dataSubjectParams?.id;
+            delete OneTrust?.dataSubjectParams?.isAnonymous;
+            delete OneTrust?.dataSubjectParams?.token;
         };
 
         const setTrustCenterSession = (channel) => {
