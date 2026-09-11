@@ -225,7 +225,7 @@
 
                 var script = document.createElement("script");
                 script.id = "trustCenterSdkScript";
-                script.src = "https://testcomplianceportal.se.com/portal-trust-center/trust-center/scripts/trust-center-sdk.js";
+                script.src = localStorage.getItem('blobUrl') + "/portal-trust-center/trust-center/scripts/trust-center-sdk.js";
                 script.type = "text/javascript";
                 script.charset = "utf-8";
                 document.head.appendChild(script);
