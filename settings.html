@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust Center Settings</title>
+    <style>
+        :root {
+            font-size: 10px;
+            font-family: Arial Rounded MT for SE, Arial Rounded MT Fallback, Arial Fallback, Arial, system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            color: #222;
+            font-size: 1.6rem;
+        }
+
+        .session-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #d9d9d9;
+        }
+
+        .back-link {
+            color: #222;
+            font-size: 1.4rem;
+        }
+
+        .settings-page {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 32px 16px;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2.4rem;
+        }
+
+        .settings-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .field {
+            display: grid;
+            gap: 6px;
+        }
+
+        label {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        input {
+            box-sizing: border-box;
+            width: 100%;
+            border: 1px solid #bdbdbd;
+            border-radius: 6px;
+            padding: 10px;
+            font: inherit;
+        }
+
+        .save-btn {
+            width: fit-content;
+            border: 0;
+            border-radius: 6px;
+            padding: 10px 16px;
+            color: #fff;
+            background: #168238;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .status {
+            min-height: 2rem;
+            margin: 0;
+            color: #176b2b;
+            font-size: 1.4rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="session-bar">
+        <a class="back-link" href="preferenceCenter5.html">Back to Preference Center</a>
+    </div>
+
+    <main class="settings-page">
+        <h1>Trust Center Settings</h1>
+        <form id="settingsForm" class="settings-form">
+            <div class="field">
+                <label for="tenantId">Tenant ID</label>
+                <input id="tenantId" name="tenantId" type="text" required>
+            </div>
+            <div class="field">
+                <label for="blobUrl">Blob URL</label>
+                <input id="blobUrl" name="blobUrl" type="url" required>
+            </div>
+            <div class="field">
+                <label for="workerUrl">Worker URL</label>
+                <input id="workerUrl" name="workerUrl" type="url" required>
+            </div>
+            <div class="field">
+                <label for="mobilePortalId">Mobile Portal ID</label>
+                <input id="mobilePortalId" name="mobilePortalId" type="text" required>
+            </div>
+            <div class="field">
+                <label for="emailPortalId">Email Portal ID</label>
+                <input id="emailPortalId" name="emailPortalId" type="text" required>
+            </div>
+            <button class="save-btn" type="submit">Save settings</button>
+            <output id="status" class="status" aria-live="polite"></output>
+        </form>
+    </main>
+
+    <script>
+        const settingNames = [
+            'tenantId',
+            'blobUrl',
+            'workerUrl',
+            'mobilePortalId',
+            'emailPortalId'
+        ];
+        const settingsForm = document.getElementById('settingsForm');
+        const status = document.getElementById('status');
+
+        settingNames.forEach(function (settingName) {
+            document.getElementById(settingName).value = localStorage.getItem(settingName) || '';
+        });
+
+        settingsForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            settingNames.forEach(function (settingName) {
+                localStorage.setItem(settingName, document.getElementById(settingName).value.trim());
+            });
+
+            status.textContent = 'Settings saved.';
+        });
+    </script>
+</body>
+
+</html>
